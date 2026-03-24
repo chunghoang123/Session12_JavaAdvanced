@@ -1,0 +1,13 @@
+1. Tại sao JDBC bắt buộc phải gọi registerOutParameter() trước khi thực thi?
+
+Khai báo kiểu dữ liệu cho Driver: Khác với tham số đầu vào (IN) đã có giá trị sẵn, tham số đầu ra
+(OUT) là một "ô nhớ trống" trên Database. JDBC cần biết trước kiểu dữ liệu đó là gì (int, decimal,
+varchar...) để chuẩn bị bộ nhớ đệm và giúp Driver ánh xạ (mapping) đúng từ kiểu dữ liệu SQL sang
+Java sau khi thực thi.
+
+Tránh lỗi Index: Nếu không đăng ký, khi bạn gọi các hàm getXXX(), hệ thống sẽ báo lỗi Column index
+out of range vì nó không tìm thấy định nghĩa nào cho vị trí tham số đó trong lời gọi thủ tục.
+
+2. Tham số đầu ra DECIMAL trong SQL thì trong Java dùng hằng số nào?
+
+Trong lớp java.sql.Types, bạn phải sử dụng hằng số: Types.DECIMAL.

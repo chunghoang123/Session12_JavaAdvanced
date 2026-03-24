@@ -1,0 +1,14 @@
+Phần 1: Phân tích cơ chế "Tấm khiên" PreparedStatement
+Trong mã nguồn lỗi, câu lệnh SQL được tạo ra bằng cách cộng chuỗi trực tiếp: sql = "SELECT ... '" + pass + "'". Điều này khiến dữ
+liệu nhập vào (Input) có khả năng thay đổi cấu trúc logic của câu lệnh SQL.
+
+Tại sao PreparedStatement lại an toàn?
+
+1. Cơ chế Pre-compiled (Biên dịch trước): Khi dùng PreparedStatement, câu lệnh SQL được gửi đến Database Server để biên dịch cấu trúc
+trước khi truyền dữ liệu vào. Database sẽ hiểu rõ: "Đây là lệnh SELECT, lấy dữ liệu từ bảng Doctors, với hai điều kiện lọc cụ thể".
+
+2. Tách biệt Mã và Dữ liệu: Các dấu hỏi chấm (?) đóng vai trò là các trình giữ chỗ (Placeholders). Khi bạn truyền tham số vào, Database
+coi chúng thuần túy là giá trị (Literal values) chứ không phải là một phần của mã lệnh thực thi.
+
+3. Vô hiệu hóa SQL Injection: Ngay cả khi người dùng nhập ' OR '1'='1, PreparedStatement sẽ xử lý chuỗi này như một văn bản bình thường.
+Database sẽ tìm kiếm một bác sĩ có mật khẩu chính xác là chuỗi ' OR '1'='1 (điều này chắc chắn sẽ sai), thay vì thực thi logic OR 1=1.

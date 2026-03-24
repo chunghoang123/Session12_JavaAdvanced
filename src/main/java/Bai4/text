@@ -1,0 +1,14 @@
+Phần 1: Phân tích sự lãng phí tài nguyên
+Khi bạn chạy một câu lệnh SQL nối chuỗi 1.000 lần (ví dụ: insert into results values (1, 3.5),
+rồi insert into results values (2, 4.2)...), Database Server phải thực hiện quy trình sau 1.000 lần:
+
+Phân tích (Parser): Kiểm tra cú pháp của 1.000 câu lệnh khác nhau (vì giá trị thay đổi nên chuỗi
+SQL thay đổi).
+
+Kiểm tra quyền hạn: Xác minh người dùng có quyền chèn dữ liệu 1.000 lần.
+
+Lập kế hoạch thực thi (Execution Plan): Đây là phần tốn kém nhất. Database phải tính toán xem lưu dữ
+liệu vào đâu, chỉ mục (index) cập nhật thế nào cho từng câu lệnh riêng biệt.
+
+Sự lãng phí: Database Server coi 1.000 câu lệnh đó là 1.000 việc hoàn toàn mới, dù cấu trúc giống
+hệt nhau. Điều này làm CPU của Database tăng cao và tốc độ xử lý cực chậm.

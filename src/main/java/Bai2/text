@@ -1,0 +1,14 @@
+Phần 1: Phân tích (Lý do dùng setDouble, setInt)
+Các phương thức setDouble() và setInt() của PreparedStatement giúp lập trình viên không cần lo ngại
+về định dạng vùng miền (Locale) vì:
+
+Truyền tham số nhị phân: Khi dùng setDouble(index, value), Java không biến số 37.5 thành một
+chuỗi ký tự rồi nối vào SQL. Nó truyền giá trị dưới dạng dữ liệu nhị phân trực tiếp đến database
+driver.
+
+Trình điều khiển (Driver) tự xử lý: Driver của MySQL sẽ tự hiểu giá trị đó là một số thực. Nó tự
+động chuyển đổi định dạng sao cho phù hợp với quy chuẩn của hệ quản trị cơ sở dữ liệu, bất kể máy
+tính của bạn đang quy định dấu phẩy hay dấu chấm cho phần thập phân.
+
+Tránh lỗi cú pháp: Nếu nối chuỗi thủ công, số 37,5 (dấu phẩy) sẽ làm câu lệnh SQL bị hiểu lầm là
+có thêm một tham số mới, gây lỗi syntax error. PreparedStatement triệt tiêu hoàn toàn nguy cơ này.
